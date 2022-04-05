@@ -1,0 +1,99 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Nunito', sans-serif;
+}
+
+*::before,
+*::after {
+    box-sizing: inherit
+}
+
+::-webkit-scrollbar {
+    width: 5px;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
+.container {
+    width: 100vw;
+    height: 100vh;
+    background-color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.content-card {
+    background-color: #1e1e1e;
+    width: 80%;
+    height: 80%;
+    border-radius: 20px;
+    padding: 20px;
+}
+
+.university-table {
+    display: block;
+    height: 85%;
+    overflow: auto;
+    border-collapse: collapse;
+}
+
+.university-table td, .university-table th {
+    border: 1px solid #ddd;
+    padding: 8px;
+    color: white;
+    cursor: pointer;
+}
+
+.university-table tr:nth-child(even) {
+    background-color: #424242;
+}
+
+.university-table tr:hover td {
+    transition: all 0.5s ease;
+    background-color: #ddd;
+    color: #424242;
+}
+
+.university-table th {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    text-align: left;
+    background-color: #424242;
+    color: white;
+}
+
+.university-row {
+    color: white;
+    font-weight: 800;
+    font-size: 16px;
+    font-family: 'Nunito', sans-serif;
+    width: 55%;
+}
+
+.university-row:not(:first-child) {
+    width: 16%;
+}
+
+.loading-container {
+    position: absolute;
+    right: 50%;
+    top: 50%;
+}
