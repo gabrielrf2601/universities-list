@@ -71,7 +71,7 @@ function App() {
                                     <td>{university.region}</td>
                                     <td>{university.regionType}</td>
                                     <td>{university.state}</td>
-                                    <td>{university.type}</td>
+                                    <td>{university.type === 'public' ? 'Pública' : 'Privada'}</td>
                                 </tr>
                             ))
                         ) : (
