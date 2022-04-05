@@ -97,3 +97,25 @@
     right: 50%;
     top: 50%;
 }
+
+.pagination-filter {
+    width: 30%;
+    border: 1px solid black;
+    background-color: #424242;
+    padding: 10px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    font-size: 14px;
+    color: white;
+}
+
+.pagination-filter:focus-visible{
+    outline: 1px solid black !important;
+}
+
+.pagination-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}

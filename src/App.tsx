@@ -10,12 +10,14 @@ function App() {
     const [loading, setLoading] = useState(false);
     const [universities, setUniversities] = useState<University[]>([]);
     const [filter, setFilter] = useState<Filter>({} as Filter);
+    const [search, setSearch] = useState(false);
+
 
     const loadUniversities = async (size: number, offset: number) => {
         try {
             setLoading(true);
             const { items, total } = await University.getAll(size, offset);
-            setFilter({ offset, size, total });
+            setFilter({ ...filter, offset, size, total });
             setUniversities(items);
         } catch (error) {
             console.log(error);
@@ -23,6 +25,19 @@ function App() {
             setLoading(false);
         }
     };
+
+    const handleFilter = async () => {
+        try {
+            setLoading(true);
+            const { items, total } = await University.search(filter.search.toLowerCase());
+            setFilter({ ...filter, offset: 0, total });
+            setUniversities(items);
+        } catch (error) {
+            console.log(error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const handleItemsPerPageChange = (rowsPerPage: number) => {
         loadUniversities(rowsPerPage, 0);
@@ -34,23 +49,56 @@ function App() {
 
     useEffect(() => {
         loadUniversities(15, 0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    useEffect(() => {
+
+        if (typeof filter.search !== 'undefined') {
+            if (filter.search.length < 3 && filter.search.length !== 0) {
+                return;
+            }
+            const timeout = setTimeout(() => {
+                if (filter.search.length === 0) {
+                    setSearch(false)
+                    loadUniversities(15, 0)
+                } else {
+                    setSearch(true)
+                    handleFilter();
+                }
+            }, 1000);
+
+            return () => { clearTimeout(timeout) };
+        }
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [filter.search]);
 
     return (
         <div className="container">
             <div className="content-card">
-                <TablePaginationHeader
-                    rowsPage={
-                        filter.offset > 0
-                            ? filter.offset / filter.size
-                            : filter.offset / filter.size + 1
-                    }
-                    rowsLength={filter.total}
-                    rowsPerPage={filter.size}
-                    onChangeRowsSize={(rowsPerPage) =>
-                        handleItemsPerPageChange(rowsPerPage)
-                    }
-                />
+                <div className="pagination-row">
+                    <input
+                        className="pagination-filter"
+                        value={filter.search}
+                        onChange={({ target }) => setFilter({ ...filter, search: target.value })}
+                        placeholder="Buscar"
+                    />
+                    {!search && (
+                        <TablePaginationHeader
+                            rowsPage={
+                                filter.offset > 0
+                                    ? filter.offset / filter.size
+                                    : filter.offset / filter.size + 1
+                            }
+                            rowsLength={filter.total}
+                            rowsPerPage={filter.size}
+                            onChangeRowsSize={(rowsPerPage) =>
+                                handleItemsPerPageChange(rowsPerPage)
+                            }
+                        />
+                    )}
+                </div>
                 <table className="university-table">
                     <thead>
                         <tr>
@@ -81,16 +129,19 @@ function App() {
                         )}
                     </tbody>
                 </table>
-                <TablePagination
-                    rowsLength={filter.total}
-                    rowsPerPage={filter.size}
-                    rowsPage={
-                        filter.offset > 0
-                            ? filter.offset / filter.size
-                            : filter.offset / filter.size + 1
-                    }
-                    handlePageChange={handlePageChange}
-                />
+                {!search && (
+                    <TablePagination
+                        rowsLength={filter.total}
+                        rowsPerPage={filter.size}
+                        rowsPage={
+                            filter.offset > 0
+                                ? filter.offset / filter.size
+                                : filter.offset / filter.size + 1
+                        }
+                        handlePageChange={handlePageChange}
+                    />
+                )}
+
             </div>
         </div>
     );

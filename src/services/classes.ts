@@ -23,10 +23,25 @@ export class University {
 
         return { total: data.length, items: filteredResponse.data };
     }
+
+    static async search(text: string) {
+        const { data } = await api.get(`/universities`);
+        const dataFiltered = data.filter(
+            (value: University) => (
+                value.name.toLowerCase().search(text) >= 0||
+                value.initial.toLowerCase().search(text) >= 0||
+                value.region.toLowerCase().search(text) >= 0||
+                value.state.toLowerCase().search(text) >= 0
+            )
+        )
+
+        return { total: dataFiltered.length, items: dataFiltered };
+    }
 }
 
 export class Filter {
     size: number;
     offset: number;
-    total: number
+    total: number;
+    search: string
 }
